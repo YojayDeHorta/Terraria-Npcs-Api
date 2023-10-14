@@ -1,13 +1,33 @@
-﻿const NpcCard = ({npc }) => {
-    console.log(npc)
+﻿import './NpcCard.css'
+import { useNavigate } from 'react-router-dom';
+const NpcCard = ({ npc }) => {
+    let navigate = useNavigate();
+    const routeChange = () => {
+        let path = `/npc/` + npc.id;
+        navigate(path);
+    }
     return (
-        <div>
-            {npc.id}
-            <div className="card shadow-sm" style={{ width: "18rem" }}>
-                <img src={npc.imgLink} className="card-img-top" alt={npc.name}/>
-                <div className="card-body">
-                    <h5 className="card-title">{npc.name}</h5>
-                    <p className="card-text">{npc.description}</p>
+        <div className="containerNpc m-3 " onClick={routeChange}>
+            
+            <img src="./pasto.png" style={{ width: "180px" }} alt="grass terraria"></img>
+            <div className="card rounded-0 cardInt pt-1">
+                <h4 className="card-title">{npc.name}</h4>
+                <hr className="hr" />
+
+
+                <img src={npc.imgLink} className=" rounded-0 imgCard"  alt={npc.name}/>
+                <div className="card-body pb-0">
+                    
+                   
+                    <div className="statistics">
+                        <p className=" mb-2">Biome:</p>
+                        <div style={{ color:"#b77e1b" }}>
+                            <img src={`./images/${npc.biome}.webp`} alt={npc.biome} className=" me-1"></img>
+                            {npc.biome}
+                        </div>
+                    </div>
+                    Job:<p> {npc.speciality}</p>
+                    
                 </div>
             </div>
         </div>

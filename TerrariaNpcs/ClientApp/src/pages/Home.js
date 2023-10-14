@@ -20,12 +20,17 @@ const Home = () => {
         getNpcs()
     },[])
     return (
-        <div className="container mt-5">
-            <button type="button" className="btn btn-primary">Add Npc</button>
-            { 
-                npcs?.map(npc =>(
+        <div className="container mt-5 d-flex flex-column">
+            <img src="./terraria.png" alt="terraria logo" style={{ width:"500px" }}></img>
+            <button type="button" className="btn btn-primary" style={{ width: "100px" }}>Add Npc</button>
+            <div className="d-flex justify-content-center flex-wrap">
+                {
+                npcs?.map(npc => (
                     <NpcCard key={npc.id} npc={npc} />
-            ))}
+                ))}
+
+            </div>
+            
         </div>
     )
 }

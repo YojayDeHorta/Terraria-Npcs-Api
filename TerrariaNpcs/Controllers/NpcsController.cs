@@ -35,10 +35,10 @@ namespace TerrariaNpcs.Controllers
             if (Imagen == null) { return NotFound(); }
 
             var extension = Path.GetExtension(Imagen.FileName);
-            if (!(extension==".jpg"|| extension == ".png"|| extension == ".jpeg"))
+            if (!(extension==".jpg"|| extension == ".png"|| extension == ".jpeg" || extension == ".webp"))
             {
                 //return StatusCode(StatusCodes.Status404NotFound, "only jpg, png, jpeg");
-                return BadRequest("only jpg, png, jpeg ");
+                return BadRequest("only jpg, png, jpeg, webp");
             }
             await _context.Npcs.AddAsync(npc);
             await _context.SaveChangesAsync();

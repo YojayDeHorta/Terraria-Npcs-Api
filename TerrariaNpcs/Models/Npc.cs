@@ -11,6 +11,8 @@ namespace TerrariaNpcs.Models
         public int? Damage { get; set; }
         public int? MaxLife { get; set; }
         public int? Defense { get; set; }
+        public string? Speciality { get; set; }
+        public string? Biome { get; set; }
         public string? ImgLink { get; set; }
         public string? ImgName { get; set; }
     }

@@ -35,14 +35,19 @@ namespace TerrariaNpcs.Models
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.Biome)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("biome");
+
                 entity.Property(e => e.Damage).HasColumnName("damage");
 
                 entity.Property(e => e.Defense).HasColumnName("defense");
 
                 entity.Property(e => e.Description)
-                    .HasMaxLength(10)
-                    .HasColumnName("description")
-                    .IsFixedLength();
+                    .HasMaxLength(500)
+                    .IsUnicode(false)
+                    .HasColumnName("description");
 
                 entity.Property(e => e.ImgLink)
                     .HasMaxLength(500)
@@ -60,6 +65,11 @@ namespace TerrariaNpcs.Models
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("name");
+
+                entity.Property(e => e.Speciality)
+                    .HasMaxLength(500)
+                    .IsUnicode(false)
+                    .HasColumnName("speciality");
             });
 
             OnModelCreatingPartial(modelBuilder);
