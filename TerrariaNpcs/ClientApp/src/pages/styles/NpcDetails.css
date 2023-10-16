@@ -1,0 +1,51 @@
+﻿.Details{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+.containerNpcDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-shadow: 1px 1px 2px #000000;
+    transition: .3s;
+}
+.imgGrassDetails {
+    width: 350px;
+}
+.cardIntDetails {
+    width: 350px;
+    background-color: #604436;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.imgCardDetails {
+    height: 60px;
+}
+.statisticsDetails {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 14px;
+    width: 140px;
+    margin-left:10px;
+}
+@media screen and (max-width: 500px) {
+    .imgCardDetails {
+        height: 60px;
+    }
+    .cardIntDetails {
+        width: 250px;
+    }
+    .imgGrassDetails {
+        width: 250px;
+    }
+    .statisticsDetails{
+        width:220px
+    }
+}

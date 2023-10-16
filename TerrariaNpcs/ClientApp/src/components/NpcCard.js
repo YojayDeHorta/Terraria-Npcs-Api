@@ -1,4 +1,4 @@
-﻿import './NpcCard.css'
+﻿import './styles/NpcCard.css'
 import { useNavigate } from 'react-router-dom';
 const NpcCard = ({ npc }) => {
     let navigate = useNavigate();

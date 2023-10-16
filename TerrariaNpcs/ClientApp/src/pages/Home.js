@@ -1,9 +1,15 @@
 ﻿import { useEffect, useState } from "react"
 import NpcCard from "../components/NpcCard";
+import NpcDialog from "../components/NpcDialog";
 
-const Home = () => {
+const Home = (args) => {
     const [npcs, setNpcs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [modal, setModal] = useState(false);
+    const toggle = () => {
+        setModal(!modal);
+        console.log("asd", modal)
+    };
 
     const getNpcs = async () => {
         try {
@@ -20,9 +26,9 @@ const Home = () => {
         getNpcs()
     },[])
     return (
-        <div className="container mt-5 d-flex flex-column">
-            <img src="./terraria.png" alt="terraria logo" style={{ width:"500px" }}></img>
-            <button type="button" className="btn btn-primary" style={{ width: "100px" }}>Add Npc</button>
+        <div className="container mt-5 d-flex flex-column ">
+            <img src="./terraria.png" alt="terraria logo" style={{ width: "500px" }}></img>
+            <button type="button" className="btn btn-primary" style={{ width: "100px" }} onClick={toggle}>Add Npc</button>
             <div className="d-flex justify-content-center flex-wrap">
                 {
                 npcs?.map(npc => (
@@ -30,6 +36,7 @@ const Home = () => {
                 ))}
 
             </div>
+            <NpcDialog modal={modal} toggle={toggle} />
             
         </div>
     )
