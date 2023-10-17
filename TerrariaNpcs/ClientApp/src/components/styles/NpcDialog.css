@@ -1,8 +1,119 @@
 ﻿.modalDialog {
-    width: 350px;
+    width: 450px;
     background-color: transparent;
 }
 .modal-content {
     background-color: transparent;
     border:none;
+}
+.inputInfo{
+    width:60px;
+    height:30px;
+}
+.containerNpcDialog {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-shadow: 1px 1px 2px #000000;
+}
+.imgGrassDialog {
+    width: 450px;
+}
+.cardIntDialog {
+    width: 450px;
+    background-color: #604436;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.statisticsDialog {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 14px;
+    width: 180px;
+    margin-left: 10px;
+    align-items:center;
+
+}
+.custom-select {
+    font-size: 12px !important;
+}
+.btnDialog {
+    width: 100px;
+    background-color: #1CD85E;
+    color: white;
+}
+
+.nameControl{
+    width:150px;
+    height:30px;
+    margin-bottom:5px;
+}
+.invalid-feedback {
+    text-shadow:2px 2px 2px #000000;
+    width:200px;
+}
+.tooltipDialog .tooltip-inner {
+    background-color: #dc3545;
+    color: white;
+    border: 1px solid #dc3545;
+}
+.tooltipDialog .tooltip-arrow::before {
+    border-right: 5px solid #dc3545 !important;
+}
+.tooltipDialogLeft .tooltip-inner {
+    background-color: #dc3545;
+    color: white;
+    border: 1px solid #dc3545;
+}
+
+.tooltipDialogLeft .tooltip-arrow::before {
+    border-left: 5px solid #dc3545 !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+@media screen and (max-width: 580px) {
+    .tooltipDialogLeft .tooltip-arrow::before {
+        visibility: hidden;
+    }
+    .tooltipDialog .tooltip-arrow::before {
+        visibility: hidden;
+    }
+    .modalDialog {
+       width:100%;
+       margin-left:0;
+       margin-right:0;
+       font-size:20px;
+    }
+    .imgGrassDialog {
+        width: 100%;
+    }
+    .cardIntDialog {
+        width: 100%;
+    }
+    .statisticsDialog {
+        margin-bottom: 50px;
+        font-size: 20px;
+    }
+    .nameControl {
+        margin-bottom: 20px;
+        margin-top: 20px;
+        height: 50px;
+    }
+    .inputInfo {
+        height: 40px;
+    }
 }
