@@ -1,15 +1,20 @@
-﻿import {  useEffect, useState } from "react"
+﻿import {  useEffect, useRef, useState } from "react"
 import { Modal, Tooltip, Form } from 'reactstrap';
 import './styles/NpcDialog.css'
 import { useForm } from 'react-hook-form'
 
-const NpcDialog = ({ modal, toggle }) => {
+const NpcDialog = ({ modal, toggle, getNpcs }) => {
     const { handleSubmit, register, reset, watch, formState: { errors } } = useForm({
         defaultValues: {
             biome: 'Forest',
         }
     });
-    const [width, setWidth] = useState(0)
+    const [width, setWidth] = useState(0);
+    const inputFile = useRef(null) 
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [bisImage, setBisImage] = useState(false);
+
     useEffect(() => {
         function handleResize() {
             setWidth(window.innerWidth)
@@ -23,13 +28,38 @@ const NpcDialog = ({ modal, toggle }) => {
     }, [setWidth])
     useEffect(() => {
         reset();
-
-        console.log(errors)
+        setSelectedImage(null);
+        setLoading(false);
     }, [modal])
-    const sendNpc = (data) => {
-        console.log(data)
-        console.log(errors)
+    const sendNpc = async(data) => {
+        if (!selectedImage) {
+            setBisImage(true)
+            setTimeout(function () { setBisImage(false); }, 3000);
 
+            return;
+        }
+        if (selectedImage) {
+            setLoading(true);
+            let formData = new FormData();
+            Object.keys(data).forEach(key => formData.append(key, data[key]));
+            formData.append('imagen', selectedImage);
+
+            const response = await fetch(`api/npcs`,{
+                method: 'POST',
+                body: formData
+            })
+            const responseData = await response.json();
+            console.log(responseData)
+            getNpcs();
+            toggle();
+        }
+    };
+    
+    const onImgClick = (event) => {
+        let type = event.target.files[0]?.type;
+        if (type === "image/jpg" || type === "image/jpeg" || type === "image/png") 
+            setSelectedImage(event.target.files[0]);
+        
     };
     return (
         <Modal isOpen={modal} toggle={toggle} className="modalDialog" >
@@ -45,13 +75,18 @@ const NpcDialog = ({ modal, toggle }) => {
                             Name is required 
                         </Tooltip>
 
-                    <hr className="hr" />
-                        <img src="./images/placeholder.png" className=" rounded-0 imgCardDetails" alt="placeholder" />
-                        <input type="file" className="form-control-sm" {...register("image")} />
+                        <hr className="hr" />
+                        <img src={selectedImage ? URL.createObjectURL(selectedImage) : "./images/addImage.png"}
+                            className={` imgCardDialog ${bisImage ? 'errorImg' : ''}`}
+                            alt="placeholder" onClick={() => inputFile.current.click()} id="controlImg" />
+                        <Tooltip placement="right" target='controlImg' isOpen={bisImage} className="tooltipDialog">
+                            Image is required
+                        </Tooltip>
+                        <input type='file' id='file' ref={inputFile} className="form-control-sm" style={{ display: 'none' }} onChange={onImgClick} accept="image/jpg, image/jpeg, image/png" />
                     <div className="card-body pb-0">
 
                         <div className="d-flex flex-wrap justify-content-center">
-                            <div className="statisticsDialog mb-2">
+                            <div className="statisticsDialog mb-4">
                                 <p className=" mb-2">Biome:</p>
                                 <div style={{ color: "#b77e1b" }} className="d-flex">
                                         <img src={`./images/${watch("biome") }.webp`} alt="biome" className=" me-1"></img>
@@ -84,9 +119,9 @@ const NpcDialog = ({ modal, toggle }) => {
                                 <div style={{ color: "#b77e1b" }} className="d-flex align-items-center">
                                     <img src={`./images/Life.webp`} alt="Life" className=" me-1" style={{ width: "25px", height:"25px" }}></img>
                                         <input type="number" className={`form-control inputInfo ${errors.maxLife ? 'is-invalid' : ''}`}
-                                            {...register("maxLife", { required: true })} id="maxlife" />
+                                            {...register("maxLife", { min: 1,max:999 })} id="maxlife" />
                                     <Tooltip placement={width < 680 ? 'bottom' :'right' } target='maxlife' isOpen={errors.maxLife ? true : false} className="tooltipDialog">
-                                        Life is required
+                                        Life can be between 1 and 999
                                     </Tooltip>
                                 </div>
                             </div>
@@ -95,9 +130,9 @@ const NpcDialog = ({ modal, toggle }) => {
                                 <div style={{ color: "#b77e1b" }} className="d-flex align-items-center">
                                     <img src={`./images/damage.webp`} alt="damage" className=" me-1" style={{ width: "25px",  }}></img>
                                         <input type="number" className={`form-control inputInfo ${errors.damage ? 'is-invalid' : ''}`}
-                                            {...register("damage", { required: true })} />
+                                            {...register("damage", { min: 1, max: 999 })} />
                                     <Tooltip placement={width < 680 ? 'bottom' :'left' }  target='damage' isOpen={errors.damage ? true : false} className="tooltipDialogLeft">
-                                        Damage is required
+                                        Damage can be between 1 and 999
                                     </Tooltip>
                                 </div>
                             </div>
@@ -106,30 +141,49 @@ const NpcDialog = ({ modal, toggle }) => {
                                 <div style={{ color: "#b77e1b" }} className="d-flex align-items-center">
                                     <img src={`./images/defense.webp`} alt="defense" className=" me-1" style={{ height: "30px",  }}></img>
                                     <input type="number" className={`form-control inputInfo ${errors.defense ? 'is-invalid' : ''}`}
-                                        {...register("defense", { required: true })} id="defense"/>
+                                        {...register("defense", { min: 1,max:999 })} id="defense"/>
                                     <Tooltip placement={width < 680 ? 'bottom' :'right' }  target='defense' isOpen={errors.defense ? true : false} className="tooltipDialog">
-                                        Defense is required
+                                       Defense can be between 1 and 999
+
                                     </Tooltip>
                                 </div>
                             </div>
                         </div>
                         <div>
                             <span id="speciality" >Job:</span>
-                            <input className="form-control mt-1 mb-2" rows="1" {...register("speciality", { required: true })}></input>
-                            <Tooltip placement='right' target='speciality' isOpen={errors.speciality ? true : false} className="tooltipDialog">
+                                <input className="form-control mt-1 mb-2" rows="1" {...register("speciality", { required: true, maxLength: 40 })}></input>
+                               
+                            <Tooltip placement='right' target='speciality' isOpen={errors.speciality?.type==="required" ? true : false} className="tooltipDialog">
                                 Job is required
+                            </Tooltip>
+                            <Tooltip placement='right' target='speciality' isOpen={errors.speciality?.type==="maxLength" ? true : false} className="tooltipDialog">
+                                Max text length is 40
                             </Tooltip>
                         </div>
                         <div>
                             <span id="description" >Description:</span>
-                            <textarea type="textarea" className="form-control mt-1 mb-2" rows="3" {...register("description", { required: true })}></textarea>
-                            <Tooltip placement='right' target='description' isOpen={errors.description ? true : false} className="tooltipDialog">
+                            <textarea type="textarea" className="form-control mt-1 mb-2" rows="3" {...register("description", { required: true, maxLength: 255 })}></textarea>
+                            <Tooltip placement='right' target='description' isOpen={errors.description?.type==="required" ? true : false} className="tooltipDialog">
                                 Description is required
+                                </Tooltip>
+                            <Tooltip placement='right' target='description' isOpen={errors.description?.type==="maxLength" ? true : false} className="tooltipDialog">
+                                Max text length is 255
                             </Tooltip>
                         </div>
-                        
-                        <button type="submit" className="btn btn-success m-3 btnDialog" >Add Npc</button>
-                        <button  className="btn btn-secondary m-3 " onClick={toggle}>Cancel</button>
+
+                            <button type="submit" className="btn btn-success m-3 btnDialog" disabled={loading}>
+                                {
+                                    loading ?
+                                        <div>
+                                            <span> Adding...</span>
+                                            <div className="spinner-border spinner-border-sm text-light ms-1" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                        </div>
+                                     : <span> Add Npc</span>
+                                }
+                            </button>
+                        <button type="button" className="btn btn-secondary m-3 " onClick={toggle}>Cancel</button>
 
                     </div>
                 </div>

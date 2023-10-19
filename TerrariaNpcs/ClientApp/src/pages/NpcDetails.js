@@ -51,21 +51,22 @@ const NpcDetails = () => {
                                 <p className=" mb-2">Life:</p>
                                 <div style={{ color: "#b77e1b" }}>
                                     <img src={`./images/Life.webp`} alt="Life" className=" me-1"></img>
-                                    {npc.maxLife}
+                                    {npc.maxLife?npc.maxLife:"n/a"}
                                 </div>
                             </div>
                             <div className="statisticsDetails">
                                 <p className=" mb-2">Damage:</p>
                                 <div style={{ color: "#b77e1b" }}>
                                     <img src={`./images/damage.webp`} alt="damage" className=" me-1"></img>
-                                    {npc.damage}
+                                    {npc.damage?npc.damage:"n/a"}
                                 </div>
                             </div>
                             <div className="statisticsDetails">
                                 <p className=" mb-2">Defense:</p>
                                 <div style={{ color: "#b77e1b" }}>
                                     <img src={`./images/defense.webp`} alt="defense" className=" me-1"></img>
-                                    {npc.defense}
+                                    {npc.defense ? npc.defense : "n/a"}
+
                                 </div>
                             </div>
                         </div>

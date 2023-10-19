@@ -2,6 +2,7 @@
 using Firebase.Storage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Net.Sockets;
 using TerrariaNpcs.Models;
 
@@ -16,10 +17,12 @@ namespace TerrariaNpcs.Controllers
             _context = contexto;
         }
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(int page=1)
         {
-            List<Npc> npcs = await _context.Npcs.ToListAsync();
-            return Ok(npcs);
+            List<Npc> npcs = await _context.Npcs.OrderBy(b => b.Id)
+            .Skip((page-1)*5).Take(5).ToListAsync();
+            float totalRecords = await _context.Npcs.CountAsync();
+            return Ok(new { page = page,totalPages= (int)Math.Ceiling(totalRecords /5), data = npcs });
         }
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
@@ -29,12 +32,12 @@ namespace TerrariaNpcs.Controllers
             return Ok(npc);
         }
         [HttpPost]
-        public async Task<IActionResult> Post([FromForm] Npc npc, IFormFile Imagen)
+        public async Task<IActionResult> Post([FromForm] Npc npc, IFormFile imagen)
         {
             //si es nulo
-            if (Imagen == null) { return NotFound(); }
+            if (imagen == null) { return NotFound(); }
 
-            var extension = Path.GetExtension(Imagen.FileName);
+            var extension = Path.GetExtension(imagen.FileName);
             if (!(extension==".jpg"|| extension == ".png"|| extension == ".jpeg" || extension == ".webp"))
             {
                 //return StatusCode(StatusCodes.Status404NotFound, "only jpg, png, jpeg");
@@ -43,7 +46,7 @@ namespace TerrariaNpcs.Controllers
             await _context.Npcs.AddAsync(npc);
             await _context.SaveChangesAsync();
 
-            Stream image = Imagen.OpenReadStream();
+            Stream image = imagen.OpenReadStream();
             npc.ImgName = npc.Id.ToString() + extension;
             npc.ImgLink = await SubirStorage(image, npc.ImgName);
             _context.Entry(npc).State = EntityState.Modified;

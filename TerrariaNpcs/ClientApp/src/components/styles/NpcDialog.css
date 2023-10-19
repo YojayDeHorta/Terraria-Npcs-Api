@@ -21,6 +21,10 @@
 .imgGrassDialog {
     width: 450px;
 }
+.imgCardDialog {
+    height: 80px;
+    border-radius: 5%;
+}
 .cardIntDialog {
     width: 450px;
     background-color: #604436;
@@ -73,6 +77,10 @@
 
 .tooltipDialogLeft .tooltip-arrow::before {
     border-left: 5px solid #dc3545 !important;
+}
+
+.errorImg{
+    border:1px solid red;
 }
 
 input::-webkit-outer-spin-button,
