@@ -15,6 +15,10 @@
 .imgCard{
     height:50px;
 }
+.skeletonImg{
+    width:50px;
+    height:70px;
+}
 hr {
     width: 96%;
     background-color: white;
@@ -25,7 +29,7 @@ hr {
 }
 .cardInt {
     width: 180px;
-    /*height: 220px;*/
+    height: 220px;
     max-height:250px;
     background-color: #604436;
     display: flex;

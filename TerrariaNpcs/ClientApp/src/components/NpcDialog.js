@@ -30,11 +30,11 @@ const NpcDialog = ({ modal, toggle, getNpcs }) => {
         reset();
         setSelectedImage(null);
         setLoading(false);
+        setBisImage(false)
     }, [modal])
     const sendNpc = async(data) => {
         if (!selectedImage) {
             setBisImage(true)
-            setTimeout(function () { setBisImage(false); }, 3000);
 
             return;
         }
@@ -57,8 +57,10 @@ const NpcDialog = ({ modal, toggle, getNpcs }) => {
     
     const onImgClick = (event) => {
         let type = event.target.files[0]?.type;
-        if (type === "image/jpg" || type === "image/jpeg" || type === "image/png") 
+        if (type === "image/jpg" || type === "image/jpeg" || type === "image/png") {
+            setBisImage(false)
             setSelectedImage(event.target.files[0]);
+        } 
         
     };
     return (
@@ -76,12 +78,11 @@ const NpcDialog = ({ modal, toggle, getNpcs }) => {
                         </Tooltip>
 
                         <hr className="hr" />
-                        <img src={selectedImage ? URL.createObjectURL(selectedImage) : "./images/addImage.png"}
+                        <img src={selectedImage ? URL.createObjectURL(selectedImage) : "./images/placeholder.png"}
                             className={` imgCardDialog ${bisImage ? 'errorImg' : ''}`}
                             alt="placeholder" onClick={() => inputFile.current.click()} id="controlImg" />
-                        <Tooltip placement="right" target='controlImg' isOpen={bisImage} className="tooltipDialog">
-                            Image is required
-                        </Tooltip>
+                        <i class="arrowModal " style={{ display: bisImage ? 'flex' : 'none' }}></i>
+                        <span style={{ display: bisImage ? 'flex' : 'none' }} className="text-center">Don't forget to add the image of the npc!</span>
                         <input type='file' id='file' ref={inputFile} className="form-control-sm" style={{ display: 'none' }} onChange={onImgClick} accept="image/jpg, image/jpeg, image/png" />
                     <div className="card-body pb-0">
 
