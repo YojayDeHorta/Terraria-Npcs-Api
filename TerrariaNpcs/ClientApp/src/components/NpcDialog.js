@@ -2,6 +2,8 @@
 import { Modal, Tooltip, Form } from 'reactstrap';
 import './styles/NpcDialog.css'
 import { useForm } from 'react-hook-form'
+import { useAuthContext } from '../auth/AuthProvider'
+import { useUtilContext } from '../auth/UtilitiesProvider'
 
 const NpcDialog = ({ modal, toggle, getNpcs, page }) => {
     const { handleSubmit, register, reset, watch, formState: { errors } } = useForm({
@@ -14,6 +16,8 @@ const NpcDialog = ({ modal, toggle, getNpcs, page }) => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [loading, setLoading] = useState(false);
     const [bisImage, setBisImage] = useState(false);
+    const Auth = useAuthContext()
+    const util = useUtilContext()
 
     useEffect(() => {
         function handleResize() {
@@ -31,6 +35,8 @@ const NpcDialog = ({ modal, toggle, getNpcs, page }) => {
         setSelectedImage(null);
         setLoading(false);
         setBisImage(false);
+        if (modal && !Auth.token) util.toggleToast("Advice", "Remember to log in to add your npcs!")
+
     }, [modal])
     const sendNpc = async(data) => {
         if (!selectedImage) {
@@ -43,9 +49,11 @@ const NpcDialog = ({ modal, toggle, getNpcs, page }) => {
             let formData = new FormData();
             Object.keys(data).forEach(key => formData.append(key, data[key]));
             formData.append('imagen', selectedImage);
+            formData.append('userId', Auth.user.id);
 
             const response = await fetch(`api/npcs`,{
                 method: 'POST',
+                headers: { "Authorization": `Bearer ${Auth.token}` },
                 body: formData
             })
             const responseData = await response.json();
@@ -172,18 +180,19 @@ const NpcDialog = ({ modal, toggle, getNpcs, page }) => {
                             </Tooltip>
                         </div>
 
-                            <button type="submit" className="btn btn-success m-3 btnDialog" disabled={loading}>
-                                {
-                                    loading ?
-                                        <div>
-                                            <span> Adding...</span>
-                                            <div className="spinner-border spinner-border-sm text-light ms-1" role="status">
-                                                <span className="visually-hidden">Loading...</span>
-                                            </div>
+                        <button id="btnAdd" type="submit" className="btn btn-success m-3 btnDialog" disabled={loading || (Auth.token ? false : true)} >
+                            {
+                                loading ?
+                                    <div>
+                                        <span> Adding...</span>
+                                        <div className="spinner-border spinner-border-sm text-light ms-1" role="status">
+                                            <span className="visually-hidden">Loading...</span>
                                         </div>
-                                     : <span> Add Npc</span>
-                                }
-                            </button>
+                                    </div>
+                                    : <span> Add Npc</span>
+                            }
+                        </button>
+                        
                         <button type="button" className="btn btn-secondary m-3 " onClick={toggle}>Cancel</button>
 
                     </div>

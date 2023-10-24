@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using TerrariaNpcs.Models;
 using TerrariaNpcs.Models.Request;
 using TerrariaNpcs.Resources;
@@ -21,20 +22,30 @@ namespace TerrariaNpcs.Controllers
         public async Task<IActionResult> Authentificar([FromBody] AuthRequest model)
         {
             var userResponse = await _userService.GetUser(model);
-            if (userResponse == null)  return BadRequest("User or pass incorrect"); 
+            if (userResponse != null) return Ok(userResponse);
+            return BadRequest(new { error=true,message= "User or pass incorrect" }); 
 
-            return Ok(userResponse);
         }
         [HttpPost("register")]
         public async Task<IActionResult> Register(User user)
         {
-            user.Password = Utilities.GetSHA256(user.Password);
-            User createdUser = await _userService.SaveUser(user);
-            if (createdUser != null)
+            try
             {
-                return Ok(createdUser);
+                var decryptedPassword = user.Password;
+                user.Password = Utilities.GetSHA256(user.Password);
+                User createdUser = await _userService.SaveUser(user);
+                if (createdUser == null) return BadRequest(new { error = true, message = "Existing email, please try another email" });
+                AuthRequest request = new AuthRequest();
+                request.Email=createdUser.Email;
+                request.Password=decryptedPassword;
+                
+                return await Authentificar(request);
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return BadRequest(new { error = true, message = "Internal server error" });
+
             }
-            return BadRequest("user could not be created");
         }
     }
 }

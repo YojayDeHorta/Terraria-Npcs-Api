@@ -29,7 +29,7 @@ namespace TerrariaNpcs.Services.Implementation
             string EncPassword=Utilities.GetSHA256(model.Password); 
             User user = await _context.Users.Where(u=>u.Email == model.Email && u.Password== EncPassword).FirstOrDefaultAsync();
             if (user == null) return null;
-            response.Email = user.Email;
+            response.Id = user.Id;
             response.Name = user.Name;
             response.Token = GetToken(user);
             return response;
@@ -38,9 +38,9 @@ namespace TerrariaNpcs.Services.Implementation
         public async Task<User> SaveUser(User user)
         {
             User Test= await _context.Users.Where(u => u.Email == user.Email ).FirstOrDefaultAsync();
-            if (user != null) return null;
+            if (Test != null) return null;
 
-            _context.Users.Add(user);
+            await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return user;
         }
@@ -54,7 +54,6 @@ namespace TerrariaNpcs.Services.Implementation
                     new Claim[]
                     {
                         new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
-                        new Claim(ClaimTypes.Email,user.Email),
                         new Claim(ClaimTypes.Name,user.Name),
 
                     }

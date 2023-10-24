@@ -2,9 +2,12 @@
 import './styles/NpcCard.css'
 import { useNavigate } from 'react-router-dom';
 import { Spinner } from 'reactstrap';
+import { useAuthContext } from '../auth/AuthProvider'
 
 const NpcCard = ({ npc, deleteModal, getNpcs, page }) => {
     let navigate = useNavigate();
+    const Auth = useAuthContext()
+
     const routeChange = () => {
         let path = `/npc/` + npc.id;
         navigate(path);
@@ -15,8 +18,11 @@ const NpcCard = ({ npc, deleteModal, getNpcs, page }) => {
         
         try {
             setLoading(true)
-            const response = await fetch(`api/npcs/${npc.id}`, {
+            const response = await fetch(`api/npcs/`, {
                 method: 'DELETE',
+                headers: { 'Content-type': 'application/json',"Authorization": `Bearer ${Auth.token}` },
+                body: JSON.stringify({ userId: Auth.user.id, npcId:npc.id })
+
             });
             const data = await response.status;
             console.log(data)

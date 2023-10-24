@@ -4,8 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
 using TerrariaNpcs.Models;
+using TerrariaNpcs.Models.Request;
 
 namespace TerrariaNpcs.Controllers
 {
@@ -35,6 +38,15 @@ namespace TerrariaNpcs.Controllers
             if (npc == null) { return NotFound(); }
             return Ok(npc);
         }
+        [HttpGet("user/{UserId:int}")]
+        public async Task<IActionResult> GetByUserId(int UserId, int page = 1)
+        {
+            var npcs = await _context.Npcs.Where(u => u.UserId == UserId).OrderBy(b => b.Id)
+            .Skip((page - 1) * 5).Take(5).ToListAsync();
+            //if (npc == null || !npc.Any()) { return NotFound(); }
+            float totalRecords = await _context.Npcs.Where(u => u.UserId == UserId).CountAsync();
+            return Ok(new { page = page, totalPages = (int)Math.Ceiling(totalRecords / 5), data = npcs });
+        }
         [HttpPost]
         public async Task<IActionResult> Post([FromForm] Npc npc, IFormFile imagen)
         {
@@ -58,10 +70,13 @@ namespace TerrariaNpcs.Controllers
             await _context.SaveChangesAsync();
             return Ok(npc);
         }
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id)
+        
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] DeleteRequest model)
         {
-            var npc = await _context.Npcs.FindAsync(id);
+
+
+            var npc = await _context.Npcs.FindAsync(model.npcId);
             if (npc == null) { return NotFound(); }
             var storage = await FirebaseStorageCustom();
             await storage.Child("npcs").Child(npc.ImgName).DeleteAsync();

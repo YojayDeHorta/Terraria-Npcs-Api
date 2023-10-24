@@ -15,5 +15,8 @@ namespace TerrariaNpcs.Models
         public string? Biome { get; set; }
         public string? ImgLink { get; set; }
         public string? ImgName { get; set; }
+        public int? UserId { get; set; }
+
+        public virtual User? User { get; set; }
     }
 }
