@@ -3,7 +3,7 @@ import { Modal, Tooltip, Form } from 'reactstrap';
 import './styles/NpcDialog.css'
 import { useForm } from 'react-hook-form'
 
-const NpcDialog = ({ modal, toggle, getNpcs }) => {
+const NpcDialog = ({ modal, toggle, getNpcs, page }) => {
     const { handleSubmit, register, reset, watch, formState: { errors } } = useForm({
         defaultValues: {
             biome: 'Forest',
@@ -30,7 +30,7 @@ const NpcDialog = ({ modal, toggle, getNpcs }) => {
         reset();
         setSelectedImage(null);
         setLoading(false);
-        setBisImage(false)
+        setBisImage(false);
     }, [modal])
     const sendNpc = async(data) => {
         if (!selectedImage) {
@@ -50,7 +50,7 @@ const NpcDialog = ({ modal, toggle, getNpcs }) => {
             })
             const responseData = await response.json();
             console.log(responseData)
-            getNpcs();
+            getNpcs(page+1);
             toggle();
         }
     };
@@ -81,7 +81,7 @@ const NpcDialog = ({ modal, toggle, getNpcs }) => {
                         <img src={selectedImage ? URL.createObjectURL(selectedImage) : "./images/placeholder.png"}
                             className={` imgCardDialog ${bisImage ? 'errorImg' : ''}`}
                             alt="placeholder" onClick={() => inputFile.current.click()} id="controlImg" />
-                        <i class="arrowModal " style={{ display: bisImage ? 'flex' : 'none' }}></i>
+                        <i className="arrowModal " style={{ display: bisImage ? 'flex' : 'none' }}></i>
                         <span style={{ display: bisImage ? 'flex' : 'none' }} className="text-center">Don't forget to add the image of the npc!</span>
                         <input type='file' id='file' ref={inputFile} className="form-control-sm" style={{ display: 'none' }} onChange={onImgClick} accept="image/jpg, image/jpeg, image/png" />
                     <div className="card-body pb-0">

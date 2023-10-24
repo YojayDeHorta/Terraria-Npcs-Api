@@ -1,5 +1,6 @@
 ﻿using Firebase.Auth;
 using Firebase.Storage;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -10,12 +11,14 @@ namespace TerrariaNpcs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class NpcsController : Controller
     {
         private readonly TerrariaContext _context;
         public NpcsController(TerrariaContext contexto) {
             _context = contexto;
         }
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Get(int page=1)
         {
@@ -24,6 +27,7 @@ namespace TerrariaNpcs.Controllers
             float totalRecords = await _context.Npcs.CountAsync();
             return Ok(new { page = page,totalPages= (int)Math.Ceiling(totalRecords /5), data = npcs });
         }
+        [AllowAnonymous]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {

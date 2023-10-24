@@ -10,8 +10,10 @@ const Home = (args) => {
     const [loading, setLoading] = useState(true);
     const [modal, setModal] = useState(false);
     const [searchParams,setSearchParams] = useSearchParams();
-    const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
-    const [totalPages, setTotalPages] = useState(0)
+    const [page, setPage] = useState(Number(searchParams.get("page")) || 0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [deleteModal, setdeleteModal] = useState(false);
+
     const toggle = () => {
         setModal(!modal);
     };
@@ -29,7 +31,6 @@ const Home = (args) => {
         finally { setLoading(false); }
     }
     const handlePageClick = (event) => {
-        console.log("event",event.selected)
         setPage(event.selected );
         setSearchParams({ page: (event.selected ) })
         getNpcs(event.selected + 1);
@@ -38,25 +39,37 @@ const Home = (args) => {
         getNpcs(page + 1)
     },[])
     return (
-        <div className="container mt-5 d-flex flex-column ">
-            <img src="./terraria.png" alt="terraria logo" style={{ maxWidth: "500px" }}></img>
-            <button type="button" className="btn btn-primary" style={{ width: "100px" }} onClick={toggle}>Add Npc</button>
-
-            <div className="d-flex justify-content-center flex-wrap">
+        <div className="d-flex mt-5 align-items-center flex-column">
+            <div className="container mt-5 d-flex flex-column " style={{ minHeight: "100vh" }}>
+                {/*<img src="./terraria.png" alt="terraria logo" style={{ maxWidth: "500px" }}></img>*/}
+                <div className="d-flex">
+                    <button type="button" className="btn btn-primary" style={{ width: "100px", display: deleteModal ? "none" : "block" }} onClick={toggle}>Add Npc</button>
+                    <button type="button" className="btn btn-danger ms-2" style={{ width: deleteModal?"200px":"100px" }} onClick={() => setdeleteModal(!deleteModal)}>
+                        {deleteModal ? <span>Exit Delete Mode</span> : <span>Delete Mode</span>}
+                        
+                        
+                    </button>
+                </div>
                 
-                {loading ? (
-                    [...Array(5)].map((x, i) => (
-                        <NpcCardSkeleton key={i} />
-                    ))
-                ) : (
-                    npcs?.map(npc => (
-                        <NpcCard key={npc.id} npc={npc} />
-                    ))
-                )}
+
+                <div className="d-flex justify-content-center flex-wrap" >
+
+                    {loading ? (
+                        [...Array(5)].map((x, i) => (
+                            <NpcCardSkeleton key={i} />
+                        ))
+                    ) : (
+                        npcs?.map(npc => (
+                            <NpcCard key={npc.id} npc={npc} deleteModal={deleteModal} getNpcs={getNpcs} page={page} />
+                        ))
+                    )}
+                </div>
+                <NpcDialog modal={modal} toggle={toggle} getNpcs={getNpcs} page={page} />
             </div>
-            <Paginate actualPage={page} totalPages={totalPages} handlePageClick={handlePageClick } />
-            <NpcDialog modal={modal} toggle={toggle} getNpcs={getNpcs} />
+            <Paginate actualPage={page} totalPages={totalPages} handlePageClick={handlePageClick} />
+
         </div>
+        
     )
 }
 export default Home

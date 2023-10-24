@@ -3,10 +3,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 5rem;
+    margin-bottom: 0px;
     font-size: 1.2rem;
     gap: 5px;
     background-color: #604436;
+    border-radius: 30px 30px 0px 0px;
+    width: 80vh;
+    animation: showNav 0.5s
 }
 .pagination .page-num{
     padding:8px 15px;
@@ -30,4 +33,29 @@
 .pagination .activo {
     background-color: #5ab1bb;
     text-decoration: none !important;
+}
+.btnPagination {
+    width: 40px;
+    height: 30px;
+    padding: 0px;
+    border-radius: 15px 15px 0px 0px;
+}
+@media screen and (max-width: 500px) {
+    .pagination {
+        font-size: 15px;
+        width: 100%;
+    }
+    .pagination .page-num{
+        padding:10px 10px;
+
+    }
+}
+@keyframes showNav {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
