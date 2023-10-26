@@ -35,7 +35,7 @@ const NpcDialog = ({ modal, toggle, getNpcs, page }) => {
         setSelectedImage(null);
         setLoading(false);
         setBisImage(false);
-        if (modal && !Auth.token) util.toggleToast("Advice", "Remember to log in to add your npcs!")
+        if (modal && !Auth.token) util.toggleToast("Advice", "To add your characters you must log in or register!")
 
     }, [modal])
     const sendNpc = async(data) => {
@@ -44,7 +44,7 @@ const NpcDialog = ({ modal, toggle, getNpcs, page }) => {
 
             return;
         }
-        if (selectedImage) {
+        if (selectedImage && Auth.token) {
             setLoading(true);
             let formData = new FormData();
             Object.keys(data).forEach(key => formData.append(key, data[key]));
@@ -65,7 +65,7 @@ const NpcDialog = ({ modal, toggle, getNpcs, page }) => {
     
     const onImgClick = (event) => {
         let type = event.target.files[0]?.type;
-        if (type === "image/jpg" || type === "image/jpeg" || type === "image/png") {
+        if (type === "image/jpg" || type === "image/jpeg" || type === "image/png" || type === "image/webp") {
             setBisImage(false)
             setSelectedImage(event.target.files[0]);
         } 
@@ -91,7 +91,7 @@ const NpcDialog = ({ modal, toggle, getNpcs, page }) => {
                             alt="placeholder" onClick={() => inputFile.current.click()} id="controlImg" />
                         <i className="arrowModal " style={{ display: bisImage ? 'flex' : 'none' }}></i>
                         <span style={{ display: bisImage ? 'flex' : 'none' }} className="text-center">Don't forget to add the image of the npc!</span>
-                        <input type='file' id='file' ref={inputFile} className="form-control-sm" style={{ display: 'none' }} onChange={onImgClick} accept="image/jpg, image/jpeg, image/png" />
+                        <input type='file' id='file' ref={inputFile} className="form-control-sm" style={{ display: 'none' }} onChange={onImgClick} accept="image/jpg, image/jpeg, image/png,image/webp" />
                     <div className="card-body pb-0">
 
                         <div className="d-flex flex-wrap justify-content-center">
@@ -119,6 +119,12 @@ const NpcDialog = ({ modal, toggle, getNpcs, page }) => {
                                         </option>
                                         <option>
                                             Underground
+                                        </option>
+                                        <option>
+                                            Ocean
+                                            </option>
+                                        <option>
+                                            Mushroom
                                         </option>
                                     </select>
                                 </div>
@@ -171,16 +177,18 @@ const NpcDialog = ({ modal, toggle, getNpcs, page }) => {
                         </div>
                         <div>
                             <span id="description" >Description:</span>
-                            <textarea type="textarea" className="form-control mt-1 mb-2" rows="3" {...register("description", { required: true, maxLength: 255 })}></textarea>
+                            <textarea type="textarea" className="form-control mt-1 mb-2" rows="3" {...register("description", { required: true, maxLength: 255 })} ></textarea>
                             <Tooltip placement='right' target='description' isOpen={errors.description?.type==="required" ? true : false} className="tooltipDialog">
                                 Description is required
                                 </Tooltip>
                             <Tooltip placement='right' target='description' isOpen={errors.description?.type==="maxLength" ? true : false} className="tooltipDialog">
                                 Max text length is 255
                             </Tooltip>
+                            <div>You can add any npc, even those created by you or from some mod!</div>
+
                         </div>
 
-                        <button id="btnAdd" type="submit" className="btn btn-success m-3 btnDialog" disabled={loading || (Auth.token ? false : true)} >
+                        <button id="btnAdd" type="submit" className="btn btn-success m-3 btnDialog" disabled={ (Auth.token ? false : true)} >
                             {
                                 loading ?
                                     <div>

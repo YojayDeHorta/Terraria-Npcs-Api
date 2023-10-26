@@ -1,11 +1,11 @@
 ﻿.containerNpc {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     color: white;
     text-shadow: 1px 1px 2px #000000;
     transition: .3s;
+    height:100%;
 }
 .containerNpcHover:hover {
     box-shadow: 3px 3px 3px black;
@@ -29,8 +29,6 @@ hr {
 }
 .cardInt {
     width: 180px;
-    height: 220px;
-    max-height:250px;
     background-color: #604436;
     display: flex;
     flex-direction: column;
@@ -45,15 +43,19 @@ hr {
     font-size: 14px;
     width: 160px;
 }
-.btn-close {
-    border:2px solid red;
-}
+
 .containerNpcShake:hover {
     animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
     transform: translate3d(0, 0, 0);
     perspective: 1000px;
 }
-
+.iconDelete {
+    color: rgb(183, 126, 27);
+    transition: .3s;
+}
+.iconDelete:hover {
+    color:#dc3545;
+}
 @keyframes shake {
     10%, 90% {
         transform: translate3d(-1px, 0, 0);

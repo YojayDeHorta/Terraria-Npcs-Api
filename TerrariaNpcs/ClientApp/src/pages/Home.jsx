@@ -4,6 +4,7 @@ import NpcDialog from "../components/NpcDialog";
 import {  useSearchParams } from "react-router-dom";
 import Paginate from "../components/Paginate";
 import NpcCardSkeleton from "../components/NpcCardSkeleton";
+import { BiMessageSquareAdd } from 'react-icons/bi';
 
 const Home = (args) => {
     const [npcs, setNpcs] = useState([]);
@@ -12,7 +13,7 @@ const Home = (args) => {
     const [searchParams,setSearchParams] = useSearchParams();
     const [page, setPage] = useState(Number(searchParams.get("page")) || 0);
     const [totalPages, setTotalPages] = useState(0);
-    const [deleteModal, setdeleteModal] = useState(false);
+    const [deleteModal] = useState(false);
 
     const toggle = () => {
         setModal(!modal);
@@ -24,9 +25,11 @@ const Home = (args) => {
             setNpcs([])
             const response = await fetch(`api/npcs?page=${actualPage}`);
             const data = await response.json();
-            console.log(data)
+            //console.log(data)
             setTotalPages(data.totalPages)
             setNpcs(data.data);
+            document.title = 'Terraria Npc Api'
+
         } catch (error) { console.log(error); }
         finally { setLoading(false); }
     }
@@ -39,19 +42,15 @@ const Home = (args) => {
         getNpcs(page + 1)
     },[])
     return (
-        <div className="d-flex mt-5 align-items-center flex-column">
-            <div className="container mt-5 d-flex flex-column " style={{ minHeight: "100vh" }}>
-                {/*<img src="./terraria.png" alt="terraria logo" style={{ maxWidth: "500px" }}></img>*/}
-                <div className="d-flex">
-                    <button type="button" className="btn btn-primary" style={{ width: "100px", display: deleteModal ? "none" : "block" }} onClick={toggle}>Add Npc</button>
-                    {/*<button type="button" className="btn btn-danger ms-2" style={{ width: deleteModal?"200px":"100px" }} onClick={() => setdeleteModal(!deleteModal)}>*/}
-                    {/*    {deleteModal ? <span>Exit Delete Mode</span> : <span>Delete Mode</span>}*/}
-                        
-                        
-                    {/*</button>*/}
+        <div className="d-flex align-items-center flex-column">
+            <div className="container pt-5 d-flex flex-column " style={{ minHeight: "100vh" }}>
+                <div className="d-flex pt-5">
+                    <button type="button" className="btn btn-primary" style={{ width: "110px", display: deleteModal ? "none" : "block" }} onClick={toggle}>
+                        Add Npc
+                        {/*<BiMessageSquareAdd className="" />*/}
+                    </button>
+                    
                 </div>
-                
-
                 <div className="d-flex justify-content-center flex-wrap" >
 
                     {loading ? (

@@ -1,4 +1,5 @@
 ﻿import React, { useState, useContext } from "react";
+import { useNavigate } from 'react-router-dom';
 
 const authContext = React.createContext();
 
@@ -8,6 +9,7 @@ export function useAuthContext() {
 
 
 export function AuthProvider(props) {
+    let navigate = useNavigate(); 
 
     
     const [user, setUser] = useState({
@@ -33,6 +35,8 @@ export function AuthProvider(props) {
             name: "",
         })
         setToken(null)
+        navigate('/');
+
     }
     return (
         <authContext.Provider value={{ user, token, login, logout }}>

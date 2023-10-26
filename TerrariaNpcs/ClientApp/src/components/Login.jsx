@@ -3,6 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Tooltip } fro
 import { useForm } from 'react-hook-form'
 import { useAuthContext } from '../auth/AuthProvider'
 import { useUtilContext } from '../auth/UtilitiesProvider'
+import { LuLogIn } from 'react-icons/lu';
 
 function Login({ modalLogin, toggleLogin }) {
     const { handleSubmit, register, reset, watch, formState: { errors } } = useForm();
@@ -35,7 +36,7 @@ function Login({ modalLogin, toggleLogin }) {
             <Modal isOpen={modalLogin} toggle={toggleLogin} size="sm" >
                 <img src="./pasto.png" style={{ width: "100%" }} alt="grass terraria"></img>
                 <Form onSubmit={handleSubmit(sendNpc)}>
-                    <ModalHeader style={{ backgroundColor: "#604436", color: "white", borderRadius: "0%" }} >Login</ModalHeader>
+                    <ModalHeader style={{ backgroundColor: "#604436", color: "white", borderRadius: "0%" }} > <LuLogIn/> Login</ModalHeader>
                     <ModalBody style={{ backgroundColor: "#604436", color: "white" }} className="">
                         
                         <input type="text" className={`form-control  ${errors.Email ? 'is-invalid' : ''}`} id='emailControl'

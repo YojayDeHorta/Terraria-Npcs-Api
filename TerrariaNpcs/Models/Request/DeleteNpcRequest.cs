@@ -2,7 +2,7 @@
 
 namespace TerrariaNpcs.Models.Request
 {
-    public class DeleteRequest
+    public class DeleteNpcRequest
     {
         [Required]
         public int userId { get; set; }

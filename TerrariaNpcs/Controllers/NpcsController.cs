@@ -25,7 +25,7 @@ namespace TerrariaNpcs.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(int page=1)
         {
-            List<Npc> npcs = await _context.Npcs.OrderBy(b => b.Id)
+            List<Npc> npcs = await _context.Npcs.OrderByDescending(b => b.Id)
             .Skip((page-1)*5).Take(5).ToListAsync();
             float totalRecords = await _context.Npcs.CountAsync();
             return Ok(new { page = page,totalPages= (int)Math.Ceiling(totalRecords /5), data = npcs });
@@ -41,7 +41,8 @@ namespace TerrariaNpcs.Controllers
         [HttpGet("user/{UserId:int}")]
         public async Task<IActionResult> GetByUserId(int UserId, int page = 1)
         {
-            var npcs = await _context.Npcs.Where(u => u.UserId == UserId).OrderBy(b => b.Id)
+            //var npcs = await _context.Npcs.Where(u => u.UserId == UserId).OrderBy(b => b.Id)
+            var npcs = await _context.Npcs.Where(u => u.UserId == UserId).OrderByDescending(b => b.Id)
             .Skip((page - 1) * 5).Take(5).ToListAsync();
             //if (npc == null || !npc.Any()) { return NotFound(); }
             float totalRecords = await _context.Npcs.Where(u => u.UserId == UserId).CountAsync();
@@ -72,11 +73,11 @@ namespace TerrariaNpcs.Controllers
         }
         
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] DeleteRequest model)
+        public async Task<IActionResult> Delete([FromBody] DeleteNpcRequest model)
         {
+            
 
-
-            var npc = await _context.Npcs.FindAsync(model.npcId);
+            var npc = await _context.Npcs.Where(u => u.Id == model.npcId && u.UserId == model.userId).FirstOrDefaultAsync();
             if (npc == null) { return NotFound(); }
             var storage = await FirebaseStorageCustom();
             await storage.Child("npcs").Child(npc.ImgName).DeleteAsync();

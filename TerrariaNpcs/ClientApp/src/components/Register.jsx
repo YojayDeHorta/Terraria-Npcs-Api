@@ -3,6 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Tooltip } fro
 import { useForm } from 'react-hook-form'
 import { useAuthContext } from '../auth/AuthProvider'
 import { useUtilContext } from '../auth/UtilitiesProvider'
+import { BsFillDoorOpenFill } from 'react-icons/bs';
 
 function Register({ modalRegister, toggleRegister }) {
     const { handleSubmit, register, reset, formState: { errors } } = useForm();
@@ -39,7 +40,7 @@ function Register({ modalRegister, toggleRegister }) {
             <Modal isOpen={modalRegister} toggle={toggleRegister} size="sm" >
                 <img src="./pasto.png" style={{ width: "100%" }} alt="grass terraria"></img>
                 <Form onSubmit={handleSubmit(Register)}>
-                    <ModalHeader style={{ backgroundColor: "#604436", color: "white", borderRadius: "0%" }} >Register</ModalHeader>
+                    <ModalHeader style={{ backgroundColor: "#604436", color: "white", borderRadius: "0%" }} > <BsFillDoorOpenFill/> Register</ModalHeader>
                     <ModalBody style={{ backgroundColor: "#604436", color: "white" }} className="">
 
                         <input type="text" className={`form-control  mt-3 ${errors.Name ? 'is-invalid' : ''}`}

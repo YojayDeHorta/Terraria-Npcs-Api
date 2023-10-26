@@ -3,6 +3,7 @@ import './styles/NpcCard.css'
 import { useNavigate } from 'react-router-dom';
 import { Spinner } from 'reactstrap';
 import { useAuthContext } from '../auth/AuthProvider'
+import { PiTrashBold } from 'react-icons/pi';
 
 const NpcCard = ({ npc, deleteModal, getNpcs, page }) => {
     let navigate = useNavigate();
@@ -38,9 +39,13 @@ const NpcCard = ({ npc, deleteModal, getNpcs, page }) => {
             <div className="card rounded-0 cardInt pt-1">
                 <div className="d-flex justify-content-around w-100 text-center">
                     <h4 className="card-title w-75">{npc.name}</h4>
-                    {deleteModal && !loading ? <button type="button" disabled={loading} className="btn-close " aria-label="Close" onClick={deleteNpc} ></button> : null}
-                    {loading ?<Spinner color="danger" style={{
-                            height: '1.5rem',width: '1.5rem',marginTop:"2px"}}>
+                    {deleteModal && !loading ? <button type="button" disabled={loading} className="btn p-0 w-20"
+                        onClick={deleteNpc} >
+                        <PiTrashBold size={25} className="iconDelete" />
+                    </button> : null}
+
+                    {loading ? <Spinner color="danger" style={{
+                            height: '1.5rem',width: '1.5rem',marginTop:"4px"}}>
                             Loading...
                         </Spinner>:null
                     }

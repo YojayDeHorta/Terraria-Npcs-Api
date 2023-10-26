@@ -1,8 +1,8 @@
 ﻿.Details{
     display:flex;
     justify-content:center;
-    align-items:center;
-    height:100vh;
+    flex-direction:column;
+    height:60vh;
 }
 .containerNpcDetails {
     display: flex;
@@ -34,6 +34,10 @@
     font-size: 14px;
     width: 140px;
     margin-left:10px;
+}
+.btnBack{
+    width:100px;
+    margin-left:20px
 }
 @media screen and (max-width: 500px) {
     .imgCardDetails {
