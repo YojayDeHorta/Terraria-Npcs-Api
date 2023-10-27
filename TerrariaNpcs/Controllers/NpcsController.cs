@@ -23,12 +23,19 @@ namespace TerrariaNpcs.Controllers
         }
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Get(int page=1)
+        public async Task<IActionResult> Get( int page=1, string? search = null)
         {
-            List<Npc> npcs = await _context.Npcs.OrderByDescending(b => b.Id)
-            .Skip((page-1)*5).Take(5).ToListAsync();
-            float totalRecords = await _context.Npcs.CountAsync();
-            return Ok(new { page = page,totalPages= (int)Math.Ceiling(totalRecords /5), data = npcs });
+            if(search == null)
+            {
+                List<Npc> npcs = await _context.Npcs.OrderByDescending(b => b.Id)
+                .Skip((page-1)*5).Take(5).ToListAsync();
+                float totalRecords = await _context.Npcs.CountAsync();
+                return Ok(new { page,totalPages= (int)Math.Ceiling(totalRecords /5), data = npcs });
+            }
+            List<Npc> npcsSearch = await _context.Npcs.Where(s => s.Name!.Contains(search))
+                .Skip((page - 1) * 5).Take(5).ToListAsync();
+            float totalRecordsSearch = await _context.Npcs.Where(s => s.Name!.Contains(search)).CountAsync();
+            return Ok(new {  search,  page, totalPages = (int)Math.Ceiling(totalRecordsSearch / 5), data = npcsSearch });
         }
         [AllowAnonymous]
         [HttpGet("{id:int}")]

@@ -3,7 +3,6 @@ import ReactPaginate from 'react-paginate';
 import './styles/Paginate.css'
 const Paginate = ({ actualPage, totalPages,handlePageClick }) => {
     const [toggle, setToggle] = useState(true);
-
     const togglePage = () => {
         setToggle(!toggle)
     };
@@ -27,9 +26,11 @@ const Paginate = ({ actualPage, totalPages,handlePageClick }) => {
                         breakLabel="..."
                         nextLabel="next >"
                         onPageChange={handlePageClick}
-                        pageRangeDisplayed={5}
+                        pageRangeDisplayed={3}
+                        marginPagesDisplayed={2}
                         pageCount={totalPages}
                         initialPage={actualPage}
+                        forcePage={actualPage }
                         previousLabel="< previous"
                         renderOnZeroPageCount={null}
                         containerClassName="pagination"
@@ -37,6 +38,7 @@ const Paginate = ({ actualPage, totalPages,handlePageClick }) => {
                         previousLinkClassName="page-num"
                         nextLinkClassName="page-num"
                         activeLinkClassName="activo"
+                        
                     /> : <ReactPaginate
                         breakLabel="..."
                         nextLabel="next >"

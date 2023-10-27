@@ -46,7 +46,7 @@ const NavbarTerraria = props => {
     return (
         <div>
             <Navbar style={{ backgroundColor: "#604436" }} dark expand="md" fixed="top">
-                <NavbarBrand to="/" tag={RRNavLink}>
+                <NavbarBrand reloadDocument to="/" tag={RRNavLink}>
                     <img src="./terraria.png" alt="terraria logo" style={{ maxWidth: "200px" }}></img>
                 </NavbarBrand>
                 <NavbarToggler onClick={toggle} className="ms-auto" />

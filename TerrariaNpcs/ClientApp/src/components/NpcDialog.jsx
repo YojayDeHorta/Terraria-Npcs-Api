@@ -31,8 +31,7 @@ const NpcDialog = ({ modal, toggle, getNpcs, page }) => {
         }
     }, [setWidth])
     useEffect(() => {
-        reset();
-        setSelectedImage(null);
+        
         setLoading(false);
         setBisImage(false);
         if (modal && !Auth.token) util.toggleToast("Advice", "To add your characters you must log in or register!")
@@ -58,7 +57,9 @@ const NpcDialog = ({ modal, toggle, getNpcs, page }) => {
             })
             const responseData = await response.json();
             console.log(responseData)
-            getNpcs(page+1);
+            getNpcs(page + 1);
+            reset();
+            setSelectedImage(null);
             toggle();
         }
     };
@@ -80,6 +81,7 @@ const NpcDialog = ({ modal, toggle, getNpcs, page }) => {
                         <input type="text" className={`form-control nameControl ${errors.name ? 'is-invalid' : ''}`} id='nameControl'
                             placeholder="name..." {...register("name", { required: true })} />
                         
+                        {!Auth.token && <h6 className="text-center ">Hey! remember log in to save your npc</h6> }
 
                         <Tooltip placement={width < 680 ? 'bottom' : 'right'} target='nameControl' isOpen={errors.name ? true : false} className="tooltipDialog">
                             Name is required 
