@@ -1,5 +1,7 @@
 ﻿import React, { useState, useContext } from "react";
 import { Toast, ToastHeader, ToastBody } from 'reactstrap';
+import { BiError } from 'react-icons/bi';
+import { CgDanger } from 'react-icons/cg';
 
 const utilContext = React.createContext();
 
@@ -24,10 +26,12 @@ export function UtilitiesProvider(props) {
             {props.children}
             <div style={{ position: "absolute", bottom: 5, right: 5, zIndex: 9999 }}>
                 <Toast isOpen={open} fade={true} >
-                    <ToastHeader toggle={() => setOpen(false)} className={title === "Advice" ? 'bg-primary text-white' : 'bg-danger text-white' }>
+                    <ToastHeader toggle={() => setOpen(false)} className={title === "Advice" ? 'bg-primary text-white' : 'bg-danger text-white'}
+                        icon={title === "Advice" ? <CgDanger size={25} /> :  <BiError size={30} />}
+                    >
                         {title }
                     </ToastHeader>
-                    <ToastBody>
+                    <ToastBody className="fs-6">
                         {message }
                     </ToastBody>
                 </Toast>
