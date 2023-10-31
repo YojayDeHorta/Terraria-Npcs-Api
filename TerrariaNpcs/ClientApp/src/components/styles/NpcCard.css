@@ -29,6 +29,7 @@ hr {
 }
 .cardInt {
     width: 180px;
+    min-height:245px;
     background-color: #604436;
     display: flex;
     flex-direction: column;
